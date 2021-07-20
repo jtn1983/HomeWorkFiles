@@ -4,87 +4,45 @@ import javax.imageio.IIOException;
 import java.io.*;
 
 public class Main {
-    private static final String directory = "/Users/tenilin/Games";
+    private static final String PATH = "/Users/tenilin/Games/";
     public static void main(String[] args) {
         StringBuilder log = new StringBuilder();
-        File dirSrc = new File(directory, "src");
-        if (dirSrc.mkdir()) {
-            log.append("Directory src created\n");
-        }
+        createDir(log, "src", "res", "savegames", "temp" ,
+                "src/main", "src/test", "res/drawables", "res/vectors", "res/icons");
 
-        File dirRes = new File(directory, "res");
-        if(dirRes.mkdir()) {
-            log.append("Directory res created\n");
-        }
+        createFile(log, "src/main/Main.java", "src/main/Utils.java", "temp/temp.txt");
 
-        File dirSavegames = new File(directory, "savegames");
-        if(dirSavegames.mkdir()) {
-            log.append("Directory savegames created\n");
-        }
+        writeLog(log,"temp/temp.txt");
 
-        File dirTemp = new File(directory, "temp");
-        if(dirTemp.mkdir()) {
-            log.append("Directory temp created\n");
-        }
+    }
 
-        File dirMain = new File(dirSrc, "main");
-        if(dirMain.mkdir()) {
-            log.append("Directory main in src created\n");
-        }
-
-        File dirTest = new File(dirSrc, "test");
-        if(dirMain.mkdir()) {
-            log.append("Directory test in src created\n");
-        }
-
-        File fileMain = new File(dirMain, "Main.java");
-        try {
-            if (fileMain.createNewFile()) {
-                log.append("File Main.java created in main directory\n");
+    public static void createDir (StringBuilder log, String ... dirNames) {
+        for (String dirName : dirNames) {
+            File dir = new File(PATH + dirName);
+            if (dir.mkdir()) {
+                log.append("Directory ").append(dirName).append(" created\n");
             }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
         }
+    }
 
-        File fileUtils = new File(dirMain, "Utils.java");
-        try {
-            if (fileUtils.createNewFile()) {
-                log.append("File Utils.java created in main directory\n");
+    public static void createFile (StringBuilder log, String ... fileNames) {
+        for (String fileName : fileNames) {
+            File file = new File(PATH + fileName);
+            try {
+                if (file.createNewFile()) {
+                    log.append("File ").append(fileName).append(" created\n");
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
             }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
         }
+    }
 
-        File dirDrawables = new File(dirRes, "drawables");
-        if(dirDrawables.mkdir()) {
-            log.append("Directory drawables in res created\n");
-        }
-
-        File dirVectors = new File(dirRes, "vectors");
-        if(dirVectors.mkdir()) {
-            log.append("Directory vectors in res created\n");
-        }
-
-        File dirIcons = new File(dirRes, "icons");
-        if(dirIcons.mkdir()) {
-            log.append("Directory icons in res created\n");
-        }
-
-        File fileTemp = new File(dirTemp, "temp.txt");
-        try {
-            if (fileTemp.createNewFile()) {
-                log.append("File temp.txt created in temp directory\n");
-            }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileTemp))){
+    public static void writeLog(StringBuilder log, String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(PATH + fileName))){
             writer.write(log.toString());
         } catch (IOException e) {
             System.out.println(e.getMessage());;
         }
-
-
     }
 }
